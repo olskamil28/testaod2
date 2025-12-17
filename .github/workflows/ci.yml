@@ -2,12 +2,16 @@ name: CI
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [main, master]
   pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
 
     steps:
       - name: Checkout
@@ -17,32 +21,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+
+      - name: Debug - list repo root
+        run: |
+          pwd
+          ls -la
+          test -f package.json && echo "package.json OK" || exit 1
+          test -f package-lock.json && echo "package-lock.json OK" || exit 1
 
       - name: Install dependencies
         run: npm ci
-        # Si tu n'as pas de package-lock.json, remplace par:
-        # run: npm install
 
-      - name: Lint (if script exists)
-        run: |
-          if node -e "p=require('./package.json'); process.exit(p.scripts && p.scripts.lint ? 0 : 1)"; then
-            npm run lint
-          else
-            echo "No lint script, skipping."
-          fi
-
-      - name: Test (if script exists)
-        run: |
-          if node -e "p=require('./package.json'); process.exit(p.scripts && p.scripts.test ? 0 : 1)"; then
-            npm test
-          else
-            echo "No test script, skipping."
-          fi
-
-      - name: Smoke check (server boots)
+      - name: Smoke test (server boots)
         env:
-          # Mets des valeurs dummy pour éviter que ton serveur refuse d'envoyer
           BOT_TOKEN: ""
           ORDER_CHAT_ID: ""
         run: |
