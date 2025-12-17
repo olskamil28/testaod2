@@ -1,3 +1,35 @@
+// ✅ Debug visible dans Telegram si un script plante
+window.addEventListener("error", (e) => {
+  const msg = `JS error: ${e.message}`;
+  if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg);
+  else alert(msg);
+});
+
+window.addEventListener("unhandledrejection", (e) => {
+  const msg = `Promise error: ${e.reason?.message || e.reason}`;
+  if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert(msg);
+  else alert(msg);
+});
+
+// ✅ READY ultra robuste (bis) — au cas où
+(function bootTelegramReady() {
+  const tryReady = () => {
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand?.();
+      return true;
+    }
+    return false;
+  };
+
+  if (!tryReady()) {
+    let attempts = 0;
+    const t = setInterval(() => {
+      attempts++;
+      if (tryReady() || attempts > 100) clearInterval(t);
+    }, 100);
+  }
+})();
  const products = [
   { id: 1, name: "Café en grain", description: "Blend maison torréfié", price: 12.5 },
   { id: 2, name: "Thé matcha", description: "Qualité cérémoniale", price: 18.9 },
