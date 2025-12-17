@@ -1,4 +1,4 @@
-{(cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+({cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/package.json b/package.json
 new file mode 100644
 index 0000000000000000000000000000000000000000..27e59b657ed7eebeff3ff0ccdcde7f1898dcd620
