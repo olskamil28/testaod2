@@ -1,0 +1,23 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/package.json b/package.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..27e59b657ed7eebeff3ff0ccdcde7f1898dcd620
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,13 @@
++{
++  "name": "telegram-mini-shop",
++  "version": "1.0.0",
++  "description": "Mini Telegram WebApp pour vendre des produits",
++  "main": "src/server.js",
++  "scripts": {
++    "start": "node src/server.js"
++  },
++  "keywords": ["telegram", "webapp", "sales"],
++  "author": "",
++  "license": "MIT",
++  "dependencies": {}
++}
+ 
+EOF
+)
