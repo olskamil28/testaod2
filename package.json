@@ -1,0 +1,13 @@
+{
+  "name": "telegram-mini-shop",
+  "version": "1.0.0",
+  "description": "Mini Telegram WebApp pour vendre des produits",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": ["telegram", "webapp", "sales"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Boutique Telegram</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <p class="subtitle">Mini app Telegram</p>
+        <h1>Votre boutique</h1>
+      </div>
+      <div id="user-info" class="pill"></div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Produits</h2>
+        <div id="product-list" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>Panier</h2>
+        <div id="cart-items" class="stack muted">Aucun article pour l'instant.</div>
+        <div class="cart-summary">
+          <div><span>Total</span><strong id="total">0€</strong></div>
+          <button id="checkout" disabled>Envoyer la commande</button>
+        </div>
+        <p class="help">Le bouton enverra un message à votre bot Telegram.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Configurez l'environnement sur le serveur :
+        <code>BOT_TOKEN</code> et <code>ORDER_CHAT_ID</code> (ou l'identifiant de
+        l'utilisateur connecté fourni par Telegram WebApp).
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
