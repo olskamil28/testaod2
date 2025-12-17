@@ -4,23 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Boutique Telegram</title>
-
-    <!-- Styles -->
     <link rel="stylesheet" href="/styles.css" />
 
-    <!-- ✅ SDK officiel Telegram WebApp -->
+    <!-- ✅ Le script officiel est optionnel (Telegram injecte souvent l'objet),
+         mais on le garde en bonus -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <!-- ✅ Sort l'écran de chargement Telegram le plus tôt possible -->
+    <!-- ✅ READY ultra robuste : on retente plusieurs fois -->
     <script>
-      try {
-        if (window.Telegram && window.Telegram.WebApp) {
-          Telegram.WebApp.ready();
-          Telegram.WebApp.expand();
+      (function () {
+        function tryReady() {
+          try {
+            if (window.Telegram && window.Telegram.WebApp) {
+              window.Telegram.WebApp.ready();
+              window.Telegram.WebApp.expand && window.Telegram.WebApp.expand();
+              return true;
+            }
+          } catch (e) {}
+          return false;
         }
-      } catch (e) {
-        console.warn("Telegram WebApp not available yet");
-      }
+
+        if (!tryReady()) {
+          var attempts = 0;
+          var timer = setInterval(function () {
+            attempts++;
+            if (tryReady() || attempts > 100) clearInterval(timer); // ~10s max
+          }, 100);
+        }
+      })();
     </script>
   </head>
 
@@ -41,33 +52,24 @@
 
       <section>
         <h2>Panier</h2>
-        <div id="cart-items" class="stack muted">
-          Aucun article pour l'instant.
-        </div>
+        <div id="cart-items" class="stack muted">Aucun article pour l'instant.</div>
 
         <div class="cart-summary">
-          <div>
-            <span>Total</span>
-            <strong id="total">0€</strong>
-          </div>
+          <div><span>Total</span><strong id="total">0€</strong></div>
           <button id="checkout" disabled>Envoyer la commande</button>
         </div>
 
-        <p class="help">
-          Le bouton enverra un message à votre bot Telegram.
-        </p>
+        <p class="help">Le bouton enverra un message à votre bot Telegram.</p>
       </section>
     </main>
 
     <footer>
       <p>
-        Variables serveur requises :
-        <code>BOT_TOKEN</code> et
-        <code>ORDER_CHAT_ID</code> (ou l’ID utilisateur Telegram).
+        Variables serveur : <code>BOT_TOKEN</code> et <code>ORDER_CHAT_ID</code>.
       </p>
     </footer>
 
-    <!-- ✅ Script principal (defer = après chargement DOM + Telegram) -->
     <script src="/script.js" defer></script>
   </body>
 </html>
+
