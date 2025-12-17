@@ -1,5 +1,3 @@
-rm -f package.json
-cat > package.json <<'JSON'
 {
   "name": "telegram-mini-shop",
   "version": "1.0.0",
@@ -13,4 +11,4 @@ cat > package.json <<'JSON'
   "license": "MIT",
   "dependencies": {}
 }
-JSON
+
