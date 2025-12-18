@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TG Test</title>
+    <script>
+      (function () {
+        function ready() {
+          if (window.Telegram && window.Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand && Telegram.WebApp.expand();
+            document.body.innerHTML =
+              "<h1>✅ WebApp OK</h1><p>Le WebView Telegram charge bien la page.</p>";
+            return true;
+          }
+          return false;
+        }
+        if (!ready()) {
+          var n = 0;
+          var t = setInterval(function () {
+            n++;
+            if (ready() || n > 100) clearInterval(t);
+          }, 100);
+        }
+      })();
+    </script>
+  </head>
+  <body style="font-family:system-ui;padding:16px">
+    <p>Chargement…</p>
+  </body>
+</html>
