@@ -18,6 +18,10 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "POST" && parsedUrl.pathname === "/api/order") {
     return handleOrder(req, res);
   }
+  // Telegram webhook endpoint
+  if (req.method === "POST" && parsedUrl.pathname === "/telegram/webhook") {
+    return handleTelegramWebhook(req, res);
+  }
 
   return serveStatic(res, parsedUrl.pathname);
 });
@@ -147,5 +151,67 @@ function getContentType(filePath) {
   if (filePath.endsWith(".js")) return "application/javascript; charset=utf-8";
   if (filePath.endsWith(".json")) return "application/json; charset=utf-8";
   return "application/octet-stream";
+  async function handleTelegramWebhook(req, res) {
+  try {
+    if (!BOT_TOKEN) return sendJson(res, { ok: true, skipped: "BOT_TOKEN missing" });
+
+    const update = await readJsonBody(req);
+    const message = update.message || update.edited_message;
+
+    if (!message || !message.chat) return sendJson(res, { ok: true });
+
+    const chatId = message.chat.id;
+    const text = (message.text || "").trim();
+
+    if (text === "/start") {
+      const appUrl = process.env.APP_URL;
+      const url = appUrl ? `${appUrl}/?v=${Date.now()}` : "https://aod-t3cq.onrender.com/";
+
+      await sendTelegramRaw("sendMessage", {
+        chat_id: chatId,
+        text: "🛍 Bienvenue ! Ouvre la boutique ici :",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Ouvrir la boutique",
+                web_app: { url },
+              },
+            ],
+          ],
+        },
+      });
+
+      return sendJson(res, { ok: true });
+    }
+
+    // Réponse simple si l'utilisateur écrit autre chose
+    await sendTelegramRaw("sendMessage", {
+      chat_id: chatId,
+      text: "Tape /start pour ouvrir la boutique.",
+    });
+
+    return sendJson(res, { ok: true });
+  } catch (e) {
+    console.error("Webhook error:", e);
+    return sendJson(res, { ok: true }); // Telegram veut 200 OK
+  }
+}
+
+async function sendTelegramRaw(method, payload) {
+  const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/${method}`;
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const t = await response.text();
+    throw new Error(`Telegram ${method} failed: ${response.status} ${t}`);
+  }
+  return response.json();
+}
+
 }
 
