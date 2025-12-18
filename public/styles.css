@@ -1,187 +1,137 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/public/styles.css b/public/styles.css
-new file mode 100644
-index 0000000000000000000000000000000000000000..d83d864d9f0bbc51b2e33e8c95f98d8f861d6fd9
---- /dev/null
-+++ b/public/styles.css
-@@ -0,0 +1,177 @@
-+:root {
-+  --bg: #0f172a;
-+  --card: #111827;
-+  --text: #f8fafc;
-+  --muted: #94a3b8;
-+  --accent: #10b981;
-+  --accent-strong: #0ea872;
-+}
-+
-+* {
-+  box-sizing: border-box;
-+}
-+
-+body {
-+  margin: 0;
-+  padding: 24px;
-+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-+  background: radial-gradient(circle at 20% 20%, #111827, #0b1120), var(--bg);
-+  color: var(--text);
-+  min-height: 100vh;
-+}
-+
-+header {
-+  display: flex;
-+  justify-content: space-between;
-+  align-items: center;
-+  gap: 12px;
-+  margin-bottom: 32px;
-+}
-+
-+h1 {
-+  margin: 0;
-+  font-size: 28px;
-+}
-+
-+.subtitle {
-+  margin: 0;
-+  color: var(--muted);
-+}
-+
-+.pill {
-+  background: rgba(255, 255, 255, 0.06);
-+  border: 1px solid rgba(255, 255, 255, 0.1);
-+  padding: 10px 14px;
-+  border-radius: 999px;
-+  font-weight: 600;
-+  color: var(--text);
-+  min-width: 120px;
-+  text-align: center;
-+}
-+
-+main {
-+  display: grid;
-+  grid-template-columns: 2fr 1fr;
-+  gap: 20px;
-+}
-+
-+section {
-+  background: var(--card);
-+  border: 1px solid rgba(255, 255, 255, 0.08);
-+  border-radius: 16px;
-+  padding: 16px;
-+}
-+
-+h2 {
-+  margin: 0 0 12px 0;
-+}
-+
-+.grid {
-+  display: grid;
-+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-+  gap: 12px;
-+}
-+
-+.card {
-+  background: rgba(255, 255, 255, 0.03);
-+  border: 1px solid rgba(255, 255, 255, 0.08);
-+  padding: 12px;
-+  border-radius: 12px;
-+  display: grid;
-+  gap: 8px;
-+}
-+
-+.card h3 {
-+  margin: 0;
-+}
-+
-+.card p {
-+  margin: 0;
-+  color: var(--muted);
-+}
-+
-+.price {
-+  font-weight: 700;
-+  font-size: 18px;
-+}
-+
-+button {
-+  background: var(--accent);
-+  color: #0b0f1a;
-+  border: none;
-+  border-radius: 10px;
-+  padding: 10px 12px;
-+  font-weight: 700;
-+  cursor: pointer;
-+  transition: transform 0.1s ease, box-shadow 0.1s ease;
-+}
-+
-+button:hover {
-+  background: var(--accent-strong);
-+  transform: translateY(-1px);
-+}
-+
-+button:disabled {
-+  opacity: 0.5;
-+  cursor: not-allowed;
-+  transform: none;
-+}
-+
-+.stack {
-+  display: grid;
-+  gap: 10px;
-+}
-+
-+.muted {
-+  color: var(--muted);
-+}
-+
-+.cart-item {
-+  display: flex;
-+  justify-content: space-between;
-+  align-items: center;
-+  padding: 10px;
-+  background: rgba(255, 255, 255, 0.04);
-+  border-radius: 10px;
-+}
-+
-+.cart-actions {
-+  display: flex;
-+  align-items: center;
-+  gap: 8px;
-+}
-+
-+.cart-actions button {
-+  padding: 6px 10px;
-+}
-+
-+.cart-summary {
-+  display: flex;
-+  justify-content: space-between;
-+  align-items: center;
-+  margin-top: 14px;
-+}
-+
-+.help {
-+  color: var(--muted);
-+  font-size: 14px;
-+  margin: 8px 0 0;
-+}
-+
-+footer {
-+  margin-top: 24px;
-+  color: var(--muted);
-+  font-size: 14px;
-+}
-+
-+code {
-+  background: rgba(255, 255, 255, 0.08);
-+  padding: 4px 6px;
-+  border-radius: 6px;
-+}
-+
-+@media (max-width: 900px) {
-+  main {
-+    grid-template-columns: 1fr;
-+  }
-+}
- 
-EOF
-)
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #10b981;
+  --accent-strong: #0ea872;
+}
+
+/* Reset minimal (safe Telegram) */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* ⚠️ IMPORTANT
+   - pas de min-height: 100vh (bug WebView iOS)
+   - pas de position fixed global
+*/
+body {
+  padding: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, sans-serif;
+  background: #0b1120;
+  color: var(--text);
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* USER PILL */
+.pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* LAYOUT */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* SECTIONS */
+section {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+/* PRODUCTS GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* BUTTONS (Telegram safe) */
+button {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--accent);
+  color: #062a1d;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:active {
+  background: var(--accent-strong);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor
